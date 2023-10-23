@@ -9,9 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.16",
+    "date-fns": "^2.30.0",
+    "flowbite": "^1.8.1",
+    "flowbite-react": "^0.6.4",
+    "js-cookie": "^3.0.5",
     "next": "13.5.6",
+    "postcss": "^8.4.31",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^4.11.0",
+    "sweetalert2": "^11.7.32",
+    "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^7.32.0 || ^8.2.0",
