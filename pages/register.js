@@ -5,26 +5,25 @@ import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import Link from "next/link";
 
-const Login = () => {
+const Register = () => {
   const router = useRouter();
   const { mutate } = useMutation();
   const [payload, setPayload] = useState({
+    name: "",
     email: "",
     password: "",
   });
 
   const HandleSubmit = async () => {
     const res = await mutate({
-      url: `https://paace-f178cafcae7b.nevacloud.io/api/login`,
+      url: `https://paace-f178cafcae7b.nevacloud.io/api/register`,
       payload,
     });
     if (!res?.success) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Wrong Email or Password",
         timer: 2000,
         confirmButtonColor: "rgb(56 189 248)",
       });
@@ -36,7 +35,6 @@ const Login = () => {
       router.push("/");
     }
   };
-
   return (
     <>
       <div className="grid w-full h-screen">
@@ -85,14 +83,6 @@ const Login = () => {
                   login
                 </Button>
               </div>
-              <div className="text-center font-light">
-                <p>
-                  don't have an account? <span> </span>
-                  <span className="text-sky-600">
-                    <Link href="/register">register now</Link>
-                  </span>
-                </p>
-              </div>
             </form>
           </div>
         </div>
@@ -100,4 +90,4 @@ const Login = () => {
     </>
   );
 };
-export default Login;
+export default Register;
