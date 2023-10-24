@@ -1,7 +1,4 @@
-"use client";
 import { Button } from "flowbite-react";
-import { useState } from "react";
-import { BsPen } from "react-icons/bs";
 import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -15,22 +12,19 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  FormControl,
-  Textarea,
-  FormLabel,
 } from "@chakra-ui/react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-const Create = () => {
+const ModalDelete = ({ id }) => {
   const { mutate } = useMutation();
   const router = useRouter();
-  const [payload, setPayload] = useState({
-    description: "",
-  });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const HandleSubmit = async () => {
     const res = await mutate({
-      url: "https://paace-f178cafcae7b.nevacloud.io/api/post",
-      payload,
+      url: `https://paace-f178cafcae7b.nevacloud.io/api/post/delete/${id}`,
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${Cookies.get("user_token")}`,
       },
@@ -38,7 +32,7 @@ const Create = () => {
     if (res?.success) {
       Swal.fire({
         icon: "success",
-        text: "post has been added",
+        text: "post has been deleted",
         timer: 2000,
         confirmButtonColor: "rgb(56 189 248)",
         toast: true,
@@ -48,16 +42,11 @@ const Create = () => {
     }
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button
-        onClick={onOpen}
-        gradientDuoTone="purpleToBlue"
-        className="rounded-full"
-      >
-        <BsPen size={28} />
-      </Button>
+      <span onClick={onOpen} className="w-full">
+        delete
+      </span>
 
       <Modal
         isCentered
@@ -68,29 +57,17 @@ const Create = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>add new post</ModalHeader>
+          <ModalHeader>
+            <span className="font-semibold">DELETE</span>
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
-              <Textarea
-                id="description"
-                type="text"
-                placeholder="what's happening ..."
-                required
-                value={payload?.description}
-                onChange={(event) =>
-                  setPayload({ ...payload, description: event.target.value })
-                }
-                className="focus:ring-sky-400"
-              />
-            </FormControl>
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-500" />
+            <p className="font-semibold text-xl text-center">are you sure?</p>
           </ModalBody>
           <ModalFooter>
-            <Button
-              gradientDuoTone="purpleToBlue"
-              onClick={() => HandleSubmit()}
-            >
-              post
+            <Button gradientMonochrome="failure" onClick={() => HandleSubmit()}>
+              delete
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -98,4 +75,4 @@ const Create = () => {
     </>
   );
 };
-export default Create;
+export default ModalDelete;

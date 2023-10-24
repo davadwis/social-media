@@ -1,8 +1,7 @@
-"use client";
 import { Button } from "flowbite-react";
-import { useState } from "react";
-import { BsPen } from "react-icons/bs";
+import { useEffect, useState } from "react";
 import { useMutation } from "@/hooks/useMutation";
+import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -17,19 +16,44 @@ import {
   useDisclosure,
   FormControl,
   Textarea,
-  FormLabel,
 } from "@chakra-ui/react";
+import useSWR from "swr";
+import fetcher from "@/utils/fetcher";
 
-const Create = () => {
+const ModalEdit = ({ id }) => {
   const { mutate } = useMutation();
   const router = useRouter();
   const [payload, setPayload] = useState({
     description: "",
   });
 
+  const { data: posts } = useSWR(
+    [
+      `https://paace-f178cafcae7b.nevacloud.io/api/post/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+      {
+        refreshInterval: 1000,
+      },
+    ],
+    ([url, token, options]) => fetcher(url, token, options)
+  );
+
+  useEffect(() => {
+    if (posts) {
+      setPayload({
+        description: posts?.data?.description,
+      });
+    }
+  }, [posts]);
+
   const HandleSubmit = async () => {
     const res = await mutate({
-      url: "https://paace-f178cafcae7b.nevacloud.io/api/post",
+      url: `https://paace-f178cafcae7b.nevacloud.io/api/post/update/${id}`,
+      method: "PATCH",
       payload,
       headers: {
         Authorization: `Bearer ${Cookies.get("user_token")}`,
@@ -38,26 +62,22 @@ const Create = () => {
     if (res?.success) {
       Swal.fire({
         icon: "success",
-        text: "post has been added",
+        text: "post has been edited",
         timer: 2000,
         confirmButtonColor: "rgb(56 189 248)",
         toast: true,
         position: "top",
       });
-      router.reload();
+      onClose();
     }
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button
-        onClick={onOpen}
-        gradientDuoTone="purpleToBlue"
-        className="rounded-full"
-      >
-        <BsPen size={28} />
-      </Button>
+      <span onClick={onOpen} className="w-full">
+        edit
+      </span>
 
       <Modal
         isCentered
@@ -68,7 +88,9 @@ const Create = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>add new post</ModalHeader>
+          <ModalHeader>
+            <span className="font-semibold">EDIT</span>
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl>
@@ -90,7 +112,7 @@ const Create = () => {
               gradientDuoTone="purpleToBlue"
               onClick={() => HandleSubmit()}
             >
-              post
+              edit
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -98,4 +120,4 @@ const Create = () => {
     </>
   );
 };
-export default Create;
+export default ModalEdit;

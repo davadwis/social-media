@@ -2,12 +2,18 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { AiOutlineHome } from "react-icons/ai";
 import { useQueries } from "@/hooks/useQueries";
-import { Dropdown } from "flowbite-react";
-import { HiLogout } from "react-icons/hi";
 import Create from "../modal-create";
-import { Avatar } from "flowbite-react";
+import { Avatar, IconButton } from "@chakra-ui/react";
 import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+} from "@chakra-ui/react";
 
 const Footer = () => {
   const router = useRouter();
@@ -17,7 +23,6 @@ const Footer = () => {
       Authorization: `Bearer ${Cookies.get("user_token")}`,
     },
   });
-  console.log(data);
   const { mutate } = useMutation();
 
   const HandleLogout = async () => {
@@ -50,31 +55,32 @@ const Footer = () => {
                 </Link>
                 <Create />
                 <div className="pt-2">
-                  <Link
+                  <span
                     href="#"
-                    className="flex justify-center items-center border-transparent rounded-full w-8 h-8 bg-sky-500 text-white text-xl font-light"
+                    className="flex justify-center items-center w-8 h-8 "
                   >
-                    <Dropdown
-                      inline
-                      arrowIcon={false}
-                      label={<Avatar rounded />}
-                    >
-                      <Dropdown.Header>
-                        <span className="block text-sm">
-                          {data?.data?.name}
-                        </span>
-                        <span className="block truncate text-sm font-medium">
-                          {data?.data?.email}
-                        </span>
-                      </Dropdown.Header>
-                      <Dropdown.Item
-                        icon={HiLogout}
-                        onClick={() => HandleLogout()}
-                      >
-                        Sign out
-                      </Dropdown.Item>
-                    </Dropdown>
-                  </Link>
+                    <Menu>
+                      <MenuButton
+                        as={IconButton}
+                        icon={<Avatar name={data?.data?.name} />}
+                      />
+
+                      <MenuList>
+                        <MenuGroup
+                          title={data?.data?.name + " | " + data?.data?.email}
+                        >
+                          <MenuItem>
+                            <Link href="/profile">my account</Link>
+                          </MenuItem>
+                        </MenuGroup>
+                        <MenuDivider />
+
+                        <MenuItem onClick={() => HandleLogout()}>
+                          logout
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </span>
                 </div>
               </div>
             </div>

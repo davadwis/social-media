@@ -53,7 +53,7 @@ const Login = () => {
                 </div>
                 <TextInput
                   id="email"
-                  placeholder="name@flowbite.com"
+                  placeholder="name@mail.com"
                   required
                   value={payload?.email}
                   onChange={(event) =>

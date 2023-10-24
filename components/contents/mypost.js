@@ -1,0 +1,85 @@
+import { useQueries } from "@/hooks/useQueries";
+import Cookies from "js-cookie";
+import Date from "../date";
+import { Avatar } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+} from "@chakra-ui/react";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import ModalEdit from "../modal-edit/[id]";
+import ModalDelete from "../modal-delete/[id]";
+
+const MyPost = () => {
+  const { data } = useQueries({
+    prefixUrl: `https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me`,
+    headers: {
+      Authorization: `Bearer ${Cookies.get("user_token")}`,
+    },
+  });
+  return (
+    <>
+      <div className="w-full m-auto">
+        {data?.data?.map((item) => (
+          <>
+            <div
+              key={item?.data?.id}
+              className="border-b-2 border-gray-200 py-4 p-4"
+            >
+              <div className="py-2">
+                <Avatar name={item?.user?.name} />
+              </div>
+              <div className="grid grid-rows-2">
+                <div className="flex flex-col ml-2 font-semibold">
+                  <div className="grid grid-rows-2">
+                    <div className="flex justify-between">
+                      <h4>{item?.user?.name}</h4>
+                      {item?.is_own_post ? (
+                        <Menu>
+                          <MenuButton
+                            as={IconButton}
+                            aria-label="Options"
+                            icon={<BiDotsVerticalRounded />}
+                            variant="ghost"
+                            size="xl"
+                            height={4}
+                            width={4}
+                          />
+                          <MenuList>
+                            <MenuItem>
+                              <ModalEdit id={item?.id} />
+                            </MenuItem>
+                            <MenuItem color="red">
+                              <ModalDelete id={item?.id} />
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-light text-gray-500">
+                        <span>
+                          {item?.user?.email} |{" "}
+                          <Date dateString={item?.created_at} />
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="font-light px-2 py-2 text-lg">
+                  <p>{item?.description}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        ))}
+      </div>
+    </>
+  );
+};
+export default MyPost;
