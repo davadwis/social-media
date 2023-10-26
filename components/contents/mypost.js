@@ -32,8 +32,8 @@ const MyPost = () => {
               <div className="py-2">
                 <Avatar name={item?.user?.name} />
               </div>
-              <div className="grid grid-rows-2">
-                <div className="flex flex-col ml-2 font-semibold">
+              <div className="grid">
+                <div className="grid ml-2 font-semibold">
                   <div className="grid grid-rows-2">
                     <div className="flex justify-between">
                       <h4>{item?.user?.name}</h4>
@@ -71,7 +71,7 @@ const MyPost = () => {
                     </div>
                   </div>
                 </div>
-                <div className="font-light px-2 py-2 text-lg">
+                <div className="font-light px-2 py-2 text-lg text-justify">
                   <p>{item?.description}</p>
                 </div>
               </div>

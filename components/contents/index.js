@@ -52,13 +52,13 @@ const Contents = () => {
                         <Avatar name={item?.user?.name} />
                       </Link>
                     ) : (
-                      <Link href={`/profile/${item?.user?.id}`}>
+                      <Link href={`/profile/${item?.users_id}`}>
                         <Avatar name={item?.user?.name} />
                       </Link>
                     )}
                   </div>
-                  <div className="grid grid-rows-2">
-                    <div className="flex flex-col ml-2 font-semibold">
+                  <div className="grid">
+                    <div className="grid ml-2 font-semibold">
                       <div className="grid grid-rows-2">
                         <div className="flex justify-between">
                           <h4>{item?.user?.name}</h4>
@@ -96,8 +96,16 @@ const Contents = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="font-light px-2 py-2 text-lg">
+                    <div className="font-light px-2 py-2 text-lg text-justify">
                       <p>{item?.description}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 justify-end">
+                    <div>
+                      <p>Likes: {item?.likes_count}</p>
+                    </div>
+                    <div>
+                      <p>Replies: {item?.replies_count}</p>
                     </div>
                   </div>
                 </div>
