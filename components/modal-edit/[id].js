@@ -1,9 +1,7 @@
 import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useMutation } from "@/hooks/useMutation";
-import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import {
   Modal,
@@ -22,7 +20,6 @@ import fetcher from "@/utils/fetcher";
 
 const ModalEdit = ({ id }) => {
   const { mutate } = useMutation();
-  const router = useRouter();
   const [payload, setPayload] = useState({
     description: "",
   });
@@ -35,11 +32,9 @@ const ModalEdit = ({ id }) => {
           Authorization: `Bearer ${Cookies.get("user_token")}`,
         },
       },
-      {
-        refreshInterval: 1000,
-      },
     ],
-    ([url, token, options]) => fetcher(url, token, options)
+    ([url, token]) => fetcher(url, token),
+    { refreshInterval: 1000 }
   );
 
   useEffect(() => {

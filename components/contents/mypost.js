@@ -1,4 +1,3 @@
-import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
 import Date from "../date";
 import { Avatar } from "@chakra-ui/react";
@@ -12,18 +11,26 @@ import {
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import ModalEdit from "../modal-edit/[id]";
 import ModalDelete from "../modal-delete/[id]";
+import useSWR from "swr";
+import fetcher from "@/utils/fetcher";
 
 const MyPost = () => {
-  const { data } = useQueries({
-    prefixUrl: `https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me`,
-    headers: {
-      Authorization: `Bearer ${Cookies.get("user_token")}`,
-    },
-  });
+  const { data: posts } = useSWR(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { refreshInterval: 500 }
+  );
   return (
     <>
       <div className="w-full m-auto">
-        {data?.data?.map((item) => (
+        {posts?.data?.map((item) => (
           <>
             <div
               key={item?.data?.id}

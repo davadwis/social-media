@@ -1,7 +1,6 @@
 import { Button } from "flowbite-react";
 import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import {
   Modal,
@@ -17,7 +16,6 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const ModalDelete = ({ id }) => {
   const { mutate } = useMutation();
-  const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,7 +36,7 @@ const ModalDelete = ({ id }) => {
         toast: true,
         position: "top",
       });
-      router.reload();
+      onClose();
     }
   };
 

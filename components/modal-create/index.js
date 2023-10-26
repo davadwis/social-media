@@ -22,7 +22,6 @@ import {
 
 const Create = () => {
   const { mutate } = useMutation();
-  const router = useRouter();
   const [payload, setPayload] = useState({
     description: "",
   });
@@ -44,7 +43,7 @@ const Create = () => {
         toast: true,
         position: "top",
       });
-      router.reload();
+      onClose();
     }
   };
 

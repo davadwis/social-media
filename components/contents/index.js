@@ -25,9 +25,9 @@ const Contents = () => {
           Authorization: `Bearer ${Cookies.get("user_token")}`,
         },
       },
-      { refreshInterval: 1000 },
     ],
-    ([url, token, options]) => fetcher(url, token, options)
+    ([url, token]) => fetcher(url, token),
+    { refreshInterval: 500 }
   );
   return (
     <>
