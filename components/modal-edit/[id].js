@@ -24,7 +24,7 @@ const ModalEdit = ({ id }) => {
     description: "",
   });
 
-  const { data: posts } = useSWR(
+  const { data: posts, mutate: mutation } = useSWR(
     [
       `https://paace-f178cafcae7b.nevacloud.io/api/post/${id}`,
       {
@@ -33,8 +33,7 @@ const ModalEdit = ({ id }) => {
         },
       },
     ],
-    ([url, token]) => fetcher(url, token),
-    { refreshInterval: 1000 }
+    ([url, token]) => fetcher(url, token)
   );
 
   useEffect(() => {

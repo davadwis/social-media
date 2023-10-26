@@ -13,6 +13,7 @@ import ModalEdit from "../modal-edit/[id]";
 import ModalDelete from "../modal-delete/[id]";
 import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
+import Likes from "../like/[id]";
 
 const MyPost = () => {
   const { data: posts } = useSWR(
@@ -25,7 +26,7 @@ const MyPost = () => {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { refreshInterval: 500 }
+    { refreshInterval: 100 }
   );
   return (
     <>
@@ -80,6 +81,15 @@ const MyPost = () => {
                 </div>
                 <div className="font-light px-2 py-2 text-lg text-justify">
                   <p>{item?.description}</p>
+                </div>
+              </div>
+              <div className="flex gap-4 justify-end">
+                <div className="flex items-center content-center gap-1">
+                  <Likes id={item?.id} isLiked={item?.is_like_post} />
+                  <span> {item?.likes_count}</span>
+                </div>
+                <div>
+                  <p>Replies: {item?.replies_count}</p>
                 </div>
               </div>
             </div>

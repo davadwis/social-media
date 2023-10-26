@@ -4,7 +4,6 @@ import { useState } from "react";
 import { BsPen } from "react-icons/bs";
 import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import {
   Modal,
@@ -17,7 +16,6 @@ import {
   useDisclosure,
   FormControl,
   Textarea,
-  FormLabel,
 } from "@chakra-ui/react";
 
 const Create = () => {
