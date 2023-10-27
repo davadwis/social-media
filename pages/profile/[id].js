@@ -15,26 +15,34 @@ import {
 import Date from "@/components/date";
 import PostId from "@/components/contents/[id]";
 import { useRouter } from "next/router";
+import useSWR from "swr";
+import fetcher from "@/utils/fetcher";
 
 const DynamicLayout = dynamic(() => import("@/layout"));
 const Profile = () => {
   const router = useRouter();
   const { id } = router?.query;
-  const { data } = useQueries({
-    prefixUrl: `https://paace-f178cafcae7b.nevacloud.io/api/user/${id}`,
-    headers: {
-      Authorization: `Bearer ${Cookies.get("user_token")}`,
-    },
-  });
+  const { data } = useSWR(
+    [
+      `https://paace-f178cafcae7b.nevacloud.io/api/user/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { refreshInterval: 0, revalidateOnFocus: false }
+  );
   return (
     <>
       <DynamicLayout metaTitle={"Profile " + data?.data?.name}>
-        <div className="p-2 m-auto py-20 md:w-1/2 md:py-8 md:pl-20">
+        <div className="p-2 m-auto py-20 md:w-1/2 md:py-8 md:pl-20 w-full">
           <div className="flex flex-col">
             <div>
               <Card size="lg">
                 <CardHeader>
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-start items-center">
                     <Avatar name={data?.data?.name} size="xl" />
                     <div className="flex flex-col">
                       <Heading size="md" className="ml-4">
@@ -47,7 +55,6 @@ const Profile = () => {
                     </div>
                   </div>
                 </CardHeader>
-
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <div className="grid grid-cols-2 gap-4">

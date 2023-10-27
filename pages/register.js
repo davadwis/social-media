@@ -42,7 +42,7 @@ const Register = () => {
           <div className="grid border-2 border-purple-200 rounded-md p-8 w-96 shadow-md shadow-sky-400">
             <form className="flex max-w-md flex-col gap-4">
               <h2 className="text-center font-semibold text-4xl text-sky-500">
-                login
+                register
               </h2>
 
               <div>

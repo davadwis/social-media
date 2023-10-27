@@ -14,13 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useRouter } from "next/router";
+import { useSWRConfig } from "swr";
 
 const ModalDeleteReply = ({ id }) => {
   const { mutate } = useMutation();
-
   const router = useRouter();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutate: mutation } = useSWRConfig();
 
   const HandleSubmit = async () => {
     const res = await mutate({
@@ -40,13 +40,16 @@ const ModalDeleteReply = ({ id }) => {
         position: "top",
       });
       onClose();
+      mutation(
+        `https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`
+      );
       router.reload();
     }
   };
 
   return (
     <>
-      <span onClick={onOpen} className="w-full text-red-600">
+      <span onClick={onOpen} className="text-red-600">
         delete
       </span>
 

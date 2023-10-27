@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { useSWRConfig } from "swr"; // Import the mutate function
+import { useSWRConfig } from "swr";
 
 const Likes = ({ id, isLiked }) => {
   const { mutate } = useMutation();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isLiked);
   const router = useRouter();
   const { mutate: mutation } = useSWRConfig();
 
@@ -18,9 +18,8 @@ const Likes = ({ id, isLiked }) => {
           Authorization: `Bearer ${Cookies.get("user_token")}`,
         },
       });
-      setLiked(true);
       if (res?.success) {
-        // Revalidate the specific API endpoint after a successful "Like"
+        setLiked(true);
         mutation(`https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`);
       }
     } else {
@@ -30,9 +29,8 @@ const Likes = ({ id, isLiked }) => {
           Authorization: `Bearer ${Cookies.get("user_token")}`,
         },
       });
-      setLiked(false);
       if (res?.success) {
-        // Revalidate the specific API endpoint after a successful "Unlike"
+        setLiked(false);
         mutation(`https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`);
       }
     }
@@ -63,9 +61,9 @@ const Likes = ({ id, isLiked }) => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M11 4C5.5-1.5-1.5 5.5 4 11l7 7 7-7c5.458-5.458-1.542-12.458-7-7Z"
             />
           </svg>

@@ -16,17 +16,17 @@ import {
   FormControl,
   Textarea,
   Card,
-  CardHeader,
   CardBody,
-  CardFooter,
   Text,
   Avatar,
+  Spinner,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
 import Link from "next/link";
 import Date from "../date";
 import ModalDeleteReply from "../modal-delete-reply/[id]";
+import { useRouter } from "next/router";
 
 const Replies = ({
   id,
@@ -41,7 +41,13 @@ const Replies = ({
     description: "",
   });
 
-  const { data: replies, mutate: mutation } = useSWR(
+  const router = useRouter();
+
+  const {
+    data: replies,
+    mutate: mutation,
+    isValidating,
+  } = useSWR(
     [
       `https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`,
       {
@@ -51,7 +57,7 @@ const Replies = ({
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { refreshInterval: 300000, revalidateOnFocus: "false" }
+    { revalidateOnFocus: false }
   );
 
   const HandleSubmit = async () => {
@@ -74,10 +80,8 @@ const Replies = ({
       setPayload({
         description: "",
       });
-      mutation(
-        `https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`
-      );
     }
+    mutation(`https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`);
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -85,7 +89,7 @@ const Replies = ({
     <>
       <button onClick={onOpen}>
         <svg
-          class="w-6 h-6 text-gray-800 dark:text-white"
+          className="w-6 h-6 text-gray-800 dark:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -93,9 +97,9 @@ const Replies = ({
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M12.5 4.046H9V2.119c0-.921-.9-1.446-1.524-.894l-5.108 4.49a1.2 1.2 0 0 0 0 1.739l5.108 4.49C8.1 12.5 9 11.971 9 11.051V9.123h2a3.023 3.023 0 0 1 3 3.046V15a5.593 5.593 0 0 0-1.5-10.954Z"
           />
         </svg>
@@ -142,38 +146,42 @@ const Replies = ({
             ) : (
               <>
                 {replies?.data?.map((item) => (
-                  <Card size="sm" className="my-2">
-                    <CardBody>
-                      <div className="flex space-x-2 content-center items-center">
-                        <div>
+                  <Card size="sm" className="my-2" key={item?.id}>
+                    {isValidating ? (
+                      <Spinner />
+                    ) : (
+                      <CardBody>
+                        <div className="flex space-x-2 content-center items-center">
+                          <div>
+                            {item?.is_own_reply ? (
+                              <Link href="/profile">
+                                <Avatar h={10} w={10} name={item?.user?.name} />
+                              </Link>
+                            ) : (
+                              <Link href={`/profile/${item?.users_id}`}>
+                                <Avatar h={10} w={10} name={item?.user?.name} />
+                              </Link>
+                            )}
+                          </div>
+                          <div className="flex-col">
+                            <h4 className="text-lg font-semibold">
+                              {item?.user?.name}{" "}
+                              <span className="text-gray-600 font-light text-sm">
+                                <Date dateString={item?.created_at} />
+                              </span>
+                            </h4>
+                            <Text>{item?.description}</Text>
+                          </div>
+                        </div>
+                        <div className="flex text-sm content-end justify-end">
                           {item?.is_own_reply ? (
-                            <Link href="/profile">
-                              <Avatar h={10} w={10} name={item?.user?.name} />
-                            </Link>
+                            <ModalDeleteReply id={item?.id} />
                           ) : (
-                            <Link href={`/profile/${item?.users_id}`}>
-                              <Avatar h={10} w={10} name={item?.user?.name} />
-                            </Link>
+                            ""
                           )}
                         </div>
-                        <div className="flex-col">
-                          <h4 className="text-lg font-semibold">
-                            {item?.user?.name}{" "}
-                            <span className="text-gray-600 font-light text-sm">
-                              <Date dateString={item?.created_at} />
-                            </span>
-                          </h4>
-                          <Text>{item?.description}</Text>
-                        </div>
-                      </div>
-                      <div className="flex text-sm content-end items-end justify-end">
-                        {item?.is_own_reply ? (
-                          <ModalDeleteReply id={item?.id} />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </CardBody>
+                      </CardBody>
+                    )}
                   </Card>
                 ))}
               </>

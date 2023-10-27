@@ -17,9 +17,11 @@ import {
   FormControl,
   Textarea,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const Create = () => {
   const { mutate } = useMutation();
+  const router = useRouter();
   const [payload, setPayload] = useState({
     description: "",
   });
@@ -42,6 +44,12 @@ const Create = () => {
         position: "top",
       });
       onClose();
+      setPayload({
+        description: "",
+      });
+      router.prefetch(
+        `https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`
+      );
     }
   };
 
@@ -53,7 +61,21 @@ const Create = () => {
         gradientDuoTone="purpleToBlue"
         className="rounded-full"
       >
-        <BsPen size={28} />
+        <svg
+          className="w-6 h-6 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 18 18"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 1v16M1 9h16"
+          />
+        </svg>
       </Button>
 
       <Modal

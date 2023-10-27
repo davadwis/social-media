@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { AiOutlineHome } from "react-icons/ai";
-import { useQueries } from "@/hooks/useQueries";
 import Create from "../modal-create";
 import { Avatar, IconButton } from "@chakra-ui/react";
 import { useMutation } from "@/hooks/useMutation";
@@ -14,15 +13,25 @@ import {
   MenuGroup,
   MenuDivider,
 } from "@chakra-ui/react";
+import useSWR from "swr";
+import fetcher from "@/utils/fetcher";
+import { BiLogOut, BiUser } from "react-icons/bi";
+import Notification from "../modal-notification";
 
 const Footer = () => {
   const router = useRouter();
-  const { data } = useQueries({
-    prefixUrl: "https://paace-f178cafcae7b.nevacloud.io/api/user/me",
-    headers: {
-      Authorization: `Bearer ${Cookies.get("user_token")}`,
-    },
-  });
+  const { data } = useSWR(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/user/me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
   const { mutate } = useMutation();
 
   const HandleLogout = async () => {
@@ -70,13 +79,24 @@ const Footer = () => {
                           title={data?.data?.name + " | " + data?.data?.email}
                         >
                           <MenuItem>
-                            <Link href="/profile">my account</Link>
+                            <Link href="/profile">
+                              <div className="flex flex-row space-x-2 items-center">
+                                <BiUser className="w-6 h-6" />
+                                <span>my account</span>
+                              </div>
+                            </Link>
+                          </MenuItem>
+                          <MenuItem>
+                            <Notification />
                           </MenuItem>
                         </MenuGroup>
                         <MenuDivider />
 
                         <MenuItem onClick={() => HandleLogout()}>
-                          logout
+                          <div className="flex flex-row space-x-2 items-center">
+                            <BiLogOut className="w-6 h-6" />
+                            <span>logout</span>
+                          </div>
                         </MenuItem>
                       </MenuList>
                     </Menu>
