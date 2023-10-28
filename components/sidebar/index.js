@@ -66,7 +66,7 @@ function Sidebar() {
         <div className="h-screen py-4 overflow-y-auto border-r-2 dark:bg-gray-800 grid content-between">
           <div className="p-8">
             <h1 className="font-semibold text-sky-500 text-4xl">
-              <Link href="/">brand</Link>
+              <Link href="/">lettra</Link>
             </h1>
           </div>
           <div className="p-8 space-y-4">

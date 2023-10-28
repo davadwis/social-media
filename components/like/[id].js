@@ -2,14 +2,12 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useState } from "react";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
 import { useMutation } from "@/hooks/useMutation";
 
 function Likes({ id, isLiked }) {
   const { mutate } = useMutation();
   const [liked, setLiked] = useState(isLiked);
-  const router = useRouter();
   const { mutate: mutation } = useSWRConfig();
 
   const handleLike = async () => {

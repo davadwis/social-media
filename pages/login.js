@@ -1,14 +1,17 @@
+/* eslint-disable react/jsx-curly-newline */
+
 "use client";
+
 import Head from "next/head";
 import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Link from "next/link";
+import { useMutation } from "@/hooks/useMutation";
 
-const Login = () => {
+function Login() {
   const router = useRouter();
   const { mutate } = useMutation();
   const [payload, setPayload] = useState({
@@ -18,7 +21,7 @@ const Login = () => {
 
   const HandleSubmit = async () => {
     const res = await mutate({
-      url: `https://paace-f178cafcae7b.nevacloud.io/api/login`,
+      url: "https://paace-f178cafcae7b.nevacloud.io/api/login",
       payload,
     });
     if (!res?.success) {
@@ -41,8 +44,8 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>{`Brand - login`}</title>
-        <meta name="description" content={"login into Brand"} />
+        <title>Lettra</title>
+        <meta name="description" content="login into Lettra" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -106,5 +109,5 @@ const Login = () => {
       </div>
     </>
   );
-};
+}
 export default Login;

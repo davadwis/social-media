@@ -56,7 +56,7 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, refreshInterval: 0 }
   );
 
   const HandleSubmit = async () => {
