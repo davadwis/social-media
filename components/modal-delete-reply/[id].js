@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Button } from "flowbite-react";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import {
@@ -15,8 +16,9 @@ import {
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
+import { useMutation } from "@/hooks/useMutation";
 
-const ModalDeleteReply = ({ id }) => {
+function ModalDeleteReply({ id }) {
   const { mutate } = useMutation();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -79,5 +81,5 @@ const ModalDeleteReply = ({ id }) => {
       </Modal>
     </>
   );
-};
+}
 export default ModalDeleteReply;

@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-use-before-define */
 import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import {
@@ -16,9 +19,10 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import useSWR from "swr";
+import { useMutation } from "@/hooks/useMutation";
 import fetcher from "@/utils/fetcher";
 
-const ModalEdit = ({ id }) => {
+function ModalEdit({ id }) {
   const { mutate } = useMutation();
   const [payload, setPayload] = useState({
     description: "",
@@ -113,5 +117,5 @@ const ModalEdit = ({ id }) => {
       </Modal>
     </>
   );
-};
+}
 export default ModalEdit;

@@ -1,7 +1,12 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable react/button-has-type */
+
 "use client";
+
 import { Button } from "flowbite-react";
 import { useState } from "react";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import {
@@ -22,20 +27,14 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import useSWR from "swr";
-import fetcher from "@/utils/fetcher";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import fetcher from "@/utils/fetcher";
 import Date from "../date";
 import ModalDeleteReply from "../modal-delete-reply/[id]";
-import { useRouter } from "next/router";
+import { useMutation } from "@/hooks/useMutation";
 
-const Replies = ({
-  id,
-  userPost,
-  post,
-  postCreated,
-  isOwnPost,
-  repliesCount,
-}) => {
+function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
   const { mutate } = useMutation();
   const [payload, setPayload] = useState({
     description: "",
@@ -214,5 +213,5 @@ const Replies = ({
       </Modal>
     </>
   );
-};
+}
 export default Replies;

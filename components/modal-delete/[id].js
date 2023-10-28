@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Button } from "flowbite-react";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import {
@@ -13,8 +14,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { useMutation } from "@/hooks/useMutation";
 
-const ModalDelete = ({ id }) => {
+function ModalDelete({ id }) {
   const { mutate } = useMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,5 +74,5 @@ const ModalDelete = ({ id }) => {
       </Modal>
     </>
   );
-};
+}
 export default ModalDelete;

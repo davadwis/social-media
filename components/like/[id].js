@@ -1,10 +1,12 @@
+/* eslint-disable react/button-has-type */
+/* eslint-disable react/jsx-no-useless-fragment */
 import { useState } from "react";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
+import { useMutation } from "@/hooks/useMutation";
 
-const Likes = ({ id, isLiked }) => {
+function Likes({ id, isLiked }) {
   const { mutate } = useMutation();
   const [liked, setLiked] = useState(isLiked);
   const router = useRouter();
@@ -20,7 +22,7 @@ const Likes = ({ id, isLiked }) => {
       });
       if (res?.success) {
         setLiked(true);
-        mutation(`https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`);
+        mutation("https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all");
       }
     } else {
       const res = await mutate({
@@ -31,7 +33,7 @@ const Likes = ({ id, isLiked }) => {
       });
       if (res?.success) {
         setLiked(false);
-        mutation(`https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`);
+        mutation("https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all");
       }
     }
   };
@@ -71,5 +73,5 @@ const Likes = ({ id, isLiked }) => {
       )}
     </>
   );
-};
+}
 export default Likes;

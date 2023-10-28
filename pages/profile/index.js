@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
 import {
   Card,
@@ -12,12 +11,12 @@ import {
   Text,
   Avatar,
 } from "@chakra-ui/react";
-import MyPost from "@/components/contents/mypost";
 import useSWR from "swr";
+import MyPost from "@/components/contents/mypost";
 import fetcher from "@/utils/fetcher";
 
 const DynamicLayout = dynamic(() => import("@/layout"));
-const Profile = () => {
+function Profile() {
   const { data } = useSWR(
     [
       "https://paace-f178cafcae7b.nevacloud.io/api/user/me",
@@ -31,73 +30,71 @@ const Profile = () => {
     { refreshInterval: 0, revalidateOnFocus: false }
   );
   return (
-    <>
-      <DynamicLayout metaTitle={"Profile " + data?.data?.name}>
-        <div className="p-2 m-auto py-20 md:w-1/2 md:py-8 md:pl-20 w-full">
-          <div className="flex flex-col">
-            <div>
-              <Card size="lg">
-                <CardHeader>
-                  <div className="flex justify-start items-center">
-                    <Avatar name={data?.data?.name} size="xl" />
-                    <div className="flex flex-col">
-                      <Heading size="md" className="ml-4">
-                        {data?.data?.name}
-                      </Heading>
+    <DynamicLayout metaTitle={`Profile ${data?.data?.name}`}>
+      <div className="p-2 m-auto py-20 md:w-1/2 md:py-8 md:pl-20 w-full">
+        <div className="flex flex-col">
+          <div>
+            <Card size="lg">
+              <CardHeader>
+                <div className="flex justify-start items-center">
+                  <Avatar name={data?.data?.name} size="xl" />
+                  <div className="flex flex-col">
+                    <Heading size="md" className="ml-4">
+                      {data?.data?.name}
+                    </Heading>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Box>
+                        <Heading size="xs">Email</Heading>
+                        <Text pt="2" fontSize="sm">
+                          {data?.data?.email}
+                        </Text>
+                      </Box>
+                    </div>
+                    <div>
+                      <Box>
+                        <Heading size="xs">Phone</Heading>
+                        <Text pt="2" fontSize="sm">
+                          {data?.data?.phone}
+                        </Text>
+                      </Box>
+                    </div>
+                    <div>
+                      <Box>
+                        <Heading size="xs">Hobby</Heading>
+                        <Text pt="2" fontSize="sm">
+                          {data?.data?.hobby}
+                        </Text>
+                      </Box>
+                    </div>
+                    <div>
+                      <Box>
+                        <Heading size="xs">Day of Birth</Heading>
+                        <Text pt="2" fontSize="sm">
+                          {data?.data?.dob}
+                        </Text>
+                      </Box>
                     </div>
                   </div>
-                </CardHeader>
-
-                <CardBody>
-                  <Stack divider={<StackDivider />} spacing="4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Box>
-                          <Heading size="xs">Email</Heading>
-                          <Text pt="2" fontSize="sm">
-                            {data?.data?.email}
-                          </Text>
-                        </Box>
-                      </div>
-                      <div>
-                        <Box>
-                          <Heading size="xs">Phone</Heading>
-                          <Text pt="2" fontSize="sm">
-                            {data?.data?.phone}
-                          </Text>
-                        </Box>
-                      </div>
-                      <div>
-                        <Box>
-                          <Heading size="xs">Hobby</Heading>
-                          <Text pt="2" fontSize="sm">
-                            {data?.data?.hobby}
-                          </Text>
-                        </Box>
-                      </div>
-                      <div>
-                        <Box>
-                          <Heading size="xs">Day of Birth</Heading>
-                          <Text pt="2" fontSize="sm">
-                            {data?.data?.dob}
-                          </Text>
-                        </Box>
-                      </div>
-                    </div>
-                  </Stack>
-                </CardBody>
-              </Card>
-            </div>
-            <div className="text-center font-semibold text-2xl py-4 border-b-2">
-              <h4>Posts</h4>
-            </div>
-            <div className="w-full">
-              <MyPost />
-            </div>
+                </Stack>
+              </CardBody>
+            </Card>
+          </div>
+          <div className="text-center font-semibold text-2xl py-4 border-b-2">
+            <h4>Posts</h4>
+          </div>
+          <div className="w-full">
+            <MyPost />
           </div>
         </div>
-      </DynamicLayout>
-    </>
+      </div>
+    </DynamicLayout>
   );
-};
+}
 export default Profile;
