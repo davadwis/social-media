@@ -40,7 +40,6 @@
     "no-empty": "off",
     "comma-dangle": ["off", "never"],
     "no-unused-vars": "off",
-    "no-console": "off",
-    "beforeStatementContinuationChars": "never"
+    "no-console": "off"
   }
 }
