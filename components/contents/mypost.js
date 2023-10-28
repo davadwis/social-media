@@ -28,7 +28,7 @@ function MyPost() {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { refreshInterval: 100, revalidateOnFocus: false }
+    { refreshInterval: 0, revalidateOnFocus: false }
   );
   return (
     <div className="w-full m-auto">

@@ -15,14 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useRouter } from "next/router";
-import { useSWRConfig } from "swr";
 import { useMutation } from "@/hooks/useMutation";
 
 function ModalDeleteReply({ id }) {
   const { mutate } = useMutation();
-  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { mutate: mutation } = useSWRConfig();
+  const router = useRouter();
 
   const HandleSubmit = async () => {
     const res = await mutate({
@@ -42,9 +40,6 @@ function ModalDeleteReply({ id }) {
         position: "top",
       });
       onClose();
-      mutation(
-        `https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`
-      );
       router.reload();
     }
   };

@@ -33,7 +33,7 @@ function Contents() {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { refreshInterval: 100, revalidateOnFocus: false }
+    { refreshInterval: 0, revalidateOnFocus: false }
   );
   return (
     <div className="w-full m-auto p-4 py-20 md:pl-60 md:py-8 md:w-2/3">

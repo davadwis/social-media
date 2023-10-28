@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 
 "use client";
 
@@ -21,34 +21,34 @@ import {
 import { IoMdNotificationsOutline } from "react-icons/io";
 import useSWR from "swr";
 import Link from "next/link";
+import useSWRMutation from "swr/mutation";
 import fetcher from "@/utils/fetcher";
 import Date from "../date";
+import { useMutation } from "@/hooks/useMutation";
 
-export async function getServerSideProps() {
-  const res = await fetch(
-    "https://paace-f178cafcae7b.nevacloud.io/api/notifications",
-    {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("user_token")}`,
-      },
-    }
-  );
-  const notification = await res.json();
-
-  return {
-    props: {
-      notification,
-    },
-  };
-}
-
-function Notification({ notification }) {
+function Notification() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { data: notification, trigger } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/notifications",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
   return (
     <>
       <div
         className="flex flex-row space-x-2 items-center md:space-x-3 md:p-4 md:border-transparent md:hover:bg-gray-100 md:rounded-md cursor-pointer"
-        onClick={onOpen}
+        onClick={() => {
+          onOpen();
+          trigger();
+        }}
       >
         <IoMdNotificationsOutline className="w-6 h-6 md:w-12 md:h-12" />
         <span className="md:text-2xl">notification</span>
@@ -66,7 +66,6 @@ function Notification({ notification }) {
           <ModalHeader>notification</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Spinner />
             <>
               {notification?.data?.map((item) => (
                 <Card key={item?.id} className="my-2">

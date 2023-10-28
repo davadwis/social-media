@@ -14,12 +14,40 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import useSWRMutation from "swr/mutation";
 import { useMutation } from "@/hooks/useMutation";
+import fetcher from "@/utils/fetcher";
 
 function ModalDelete({ id }) {
   const { mutate } = useMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { trigger: triggerAllPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerMyPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
 
   const HandleSubmit = async () => {
     const res = await mutate({
@@ -39,6 +67,8 @@ function ModalDelete({ id }) {
         position: "top",
       });
       onClose();
+      triggerAllPosts();
+      triggerMyPosts();
     }
   };
 

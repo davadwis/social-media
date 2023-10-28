@@ -2,13 +2,52 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useState } from "react";
 import Cookies from "js-cookie";
-import { useSWRConfig } from "swr";
+import useSWRMutation from "swr/mutation";
 import { useMutation } from "@/hooks/useMutation";
+import fetcher from "@/utils/fetcher";
 
 function Likes({ id, isLiked }) {
   const { mutate } = useMutation();
   const [liked, setLiked] = useState(isLiked);
-  const { mutate: mutation } = useSWRConfig();
+
+  const { trigger: triggerAllPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerMyPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerPostsId } = useSWRMutation(
+    [
+      `https://paace-f178cafcae7b.nevacloud.io/api/posts/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
 
   const handleLike = async () => {
     if (!liked) {
@@ -20,7 +59,9 @@ function Likes({ id, isLiked }) {
       });
       if (res?.success) {
         setLiked(true);
-        mutation("https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all");
+        triggerAllPosts();
+        triggerMyPosts();
+        triggerPostsId();
       }
     } else {
       const res = await mutate({
@@ -31,7 +72,9 @@ function Likes({ id, isLiked }) {
       });
       if (res?.success) {
         setLiked(false);
-        mutation("https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all");
+        triggerAllPosts();
+        triggerMyPosts();
+        triggerPostsId();
       }
     }
   };

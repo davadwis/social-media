@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-curly-newline */
-/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable lines-around-directive */
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/button-has-type */
-
 "use client";
 
 import { Button } from "flowbite-react";
@@ -26,9 +26,9 @@ import {
   Avatar,
   Spinner,
 } from "@chakra-ui/react";
-import useSWR from "swr";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useSWRMutation from "swr/mutation";
 import fetcher from "@/utils/fetcher";
 import Date from "../date";
 import ModalDeleteReply from "../modal-delete-reply/[id]";
@@ -40,13 +40,7 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
     description: "",
   });
 
-  const router = useRouter();
-
-  const {
-    data: replies,
-    mutate: mutation,
-    isValidating,
-  } = useSWR(
+  const { data: replies, trigger } = useSWRMutation(
     [
       `https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`,
       {
@@ -56,7 +50,33 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { refreshInterval: 10000, revalidateOnFocus: false }
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerAllPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerMyPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
   );
 
   const HandleSubmit = async () => {
@@ -79,13 +99,21 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
       setPayload({
         description: "",
       });
+      trigger();
+      triggerAllPosts();
+      triggerMyPosts();
     }
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <button onClick={onOpen}>
+      <button
+        onClick={() => {
+          onOpen();
+          trigger();
+        }}
+      >
         <svg
           className="w-6 h-6 text-gray-800 dark:text-white"
           aria-hidden="true"
@@ -145,41 +173,37 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
               <>
                 {replies?.data?.map((item) => (
                   <Card size="sm" className="my-2" key={item?.id}>
-                    {isValidating ? (
-                      <Spinner />
-                    ) : (
-                      <CardBody>
-                        <div className="flex space-x-2 content-center items-center">
-                          <div>
-                            {item?.is_own_reply ? (
-                              <Link href="/profile">
-                                <Avatar h={10} w={10} name={item?.user?.name} />
-                              </Link>
-                            ) : (
-                              <Link href={`/profile/${item?.users_id}`}>
-                                <Avatar h={10} w={10} name={item?.user?.name} />
-                              </Link>
-                            )}
-                          </div>
-                          <div className="flex-col">
-                            <h4 className="text-lg font-semibold">
-                              {item?.user?.name}{" "}
-                              <span className="text-gray-600 font-light text-sm">
-                                <Date dateString={item?.created_at} />
-                              </span>
-                            </h4>
-                            <Text>{item?.description}</Text>
-                          </div>
-                        </div>
-                        <div className="flex text-sm content-end justify-end">
+                    <CardBody>
+                      <div className="flex space-x-2 content-center items-center">
+                        <div>
                           {item?.is_own_reply ? (
-                            <ModalDeleteReply id={item?.id} />
+                            <Link href="/profile">
+                              <Avatar h={10} w={10} name={item?.user?.name} />
+                            </Link>
                           ) : (
-                            ""
+                            <Link href={`/profile/${item?.users_id}`}>
+                              <Avatar h={10} w={10} name={item?.user?.name} />
+                            </Link>
                           )}
                         </div>
-                      </CardBody>
-                    )}
+                        <div className="flex-col">
+                          <h4 className="text-lg font-semibold">
+                            {item?.user?.name}{" "}
+                            <span className="text-gray-600 font-light text-sm">
+                              <Date dateString={item?.created_at} />
+                            </span>
+                          </h4>
+                          <Text>{item?.description}</Text>
+                        </div>
+                      </div>
+                      <div className="flex text-sm content-end justify-end">
+                        {item?.is_own_reply ? (
+                          <ModalDeleteReply id={item?.id} />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </CardBody>
                   </Card>
                 ))}
               </>

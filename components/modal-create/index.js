@@ -21,7 +21,9 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import useSWRMutation from "swr/mutation";
 import { useMutation } from "@/hooks/useMutation";
+import fetcher from "@/utils/fetcher";
 
 function Create() {
   const { mutate } = useMutation();
@@ -29,6 +31,32 @@ function Create() {
   const [payload, setPayload] = useState({
     description: "",
   });
+
+  const { trigger: triggerAllPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerMyPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
 
   const HandleSubmit = async () => {
     const res = await mutate({
@@ -51,9 +79,8 @@ function Create() {
       setPayload({
         description: "",
       });
-      router.prefetch(
-        "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all"
-      );
+      triggerAllPosts();
+      triggerMyPosts();
     }
   };
 

@@ -18,6 +18,7 @@ import {
   FormControl,
   Textarea,
 } from "@chakra-ui/react";
+import useSWRMutation from "swr/mutation";
 import useSWR from "swr";
 import { useMutation } from "@/hooks/useMutation";
 import fetcher from "@/utils/fetcher";
@@ -28,7 +29,7 @@ function ModalEdit({ id }) {
     description: "",
   });
 
-  const { data: posts, mutate: mutation } = useSWR(
+  const { data: posts } = useSWR(
     [
       `https://paace-f178cafcae7b.nevacloud.io/api/post/${id}`,
       {
@@ -38,6 +39,32 @@ function ModalEdit({ id }) {
       },
     ],
     ([url, token]) => fetcher(url, token)
+  );
+
+  const { trigger: triggerAllPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
+  );
+
+  const { trigger: triggerMyPosts } = useSWRMutation(
+    [
+      "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=me",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user_token")}`,
+        },
+      },
+    ],
+    ([url, token]) => fetcher(url, token),
+    { revalidateOnFocus: false }
   );
 
   useEffect(() => {
@@ -67,6 +94,8 @@ function ModalEdit({ id }) {
         position: "top",
       });
       onClose();
+      triggerAllPosts();
+      triggerMyPosts();
     }
   };
 
