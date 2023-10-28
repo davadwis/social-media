@@ -17,6 +17,7 @@ import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
 import { BiLogOut, BiUser } from "react-icons/bi";
 import Notification from "../modal-notification";
+import Swal from "sweetalert2";
 
 const Footer = () => {
   const router = useRouter();
@@ -34,31 +35,42 @@ const Footer = () => {
   );
   const { mutate } = useMutation();
 
-  const HandleLogout = async () => {
-    const res = await mutate({
-      url: "https://paace-f178cafcae7b.nevacloud.io/api/logout",
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${Cookies.get("user_token")}`,
-      },
+  const HandleLogout = () => {
+    Swal.fire({
+      title: "are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "logout",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await mutate({
+          url: "https://paace-f178cafcae7b.nevacloud.io/api/logout",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("user_token")}`,
+          },
+        });
+        if (!res?.success) {
+          console.log("Gagal Logout");
+        } else {
+          Cookies.remove("user_token");
+          router.push("/login");
+        }
+      }
     });
-    if (!res?.success) {
-      console.log("Gagal Logout");
-    } else {
-      Cookies.remove("user_token");
-      router.push("/login");
-    }
   };
   return (
     <>
-      <nav className="border fixed z-20 w-full bottom-0 border-t-2 bg-white md:hidden">
+      <nav className="fixed z-20 w-full bottom-0 border-t-2 bg-white md:hidden">
         <div className="max-w-screen-xl flex flex-wrap items-center content-center justify-center mx-auto p-4 h-[64px]">
           <div
             className="items-center w-full md:flex md:w-auto md:order-1"
             id="navbar-sticky"
           >
             <div className="flex justify-center content-center text-lg font-light">
-              <div className="flex space-x-8 content-center">
+              <div className="flex space-x-8 content-center items-center">
                 <Link href="/" className="pt-2">
                   <AiOutlineHome size={36} />
                 </Link>

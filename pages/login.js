@@ -1,4 +1,5 @@
 "use client";
+import Head from "next/head";
 import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { useMutation } from "@/hooks/useMutation";
@@ -39,6 +40,12 @@ const Login = () => {
 
   return (
     <>
+      <Head>
+        <title>{`Brand - login`}</title>
+        <meta name="description" content={"login into Brand"} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="grid w-full h-screen">
         <div className="grid justify-items-center content-center">
           <div className="grid border-2 border-purple-200 rounded-md p-8 w-96 shadow-md shadow-sky-400">

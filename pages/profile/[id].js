@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
 import {
   Card,
@@ -12,7 +11,6 @@ import {
   Text,
   Avatar,
 } from "@chakra-ui/react";
-import Date from "@/components/date";
 import PostId from "@/components/contents/[id]";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -48,10 +46,6 @@ const Profile = () => {
                       <Heading size="md" className="ml-4">
                         {data?.data?.name}
                       </Heading>
-                      <p className="ml-4">
-                        Joined since{" "}
-                        {/* <Date dateString={data?.data?.created_at} /> */}
-                      </p>
                     </div>
                   </div>
                 </CardHeader>

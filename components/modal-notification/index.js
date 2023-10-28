@@ -36,9 +36,12 @@ const Notification = () => {
   );
   return (
     <>
-      <div className="flex flex-row space-x-2 items-center" onClick={onOpen}>
-        <IoMdNotificationsOutline className="w-6 h-6" />
-        <span>notification</span>
+      <div
+        className="flex flex-row space-x-2 items-center md:space-x-3 md:p-4 md:border-transparent md:hover:bg-gray-100 md:rounded-md cursor-pointer"
+        onClick={onOpen}
+      >
+        <IoMdNotificationsOutline className="w-6 h-6 md:w-12 md:h-12" />
+        <span className="md:text-2xl">notification</span>
       </div>
 
       <Modal
@@ -61,7 +64,7 @@ const Notification = () => {
                   <Card key={item?.id} className="my-2">
                     <CardBody>
                       <div className="flex items-center">
-                        <Link href={`/profile/${item?.users_id}`}>
+                        <Link href={`/profile/${item?.user?.id}`}>
                           <Avatar name={item?.user?.name} size="sm" />
                           <span className="font-semibold text-lg ml-2">
                             {item?.user?.name}

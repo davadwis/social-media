@@ -59,7 +59,7 @@ const Create = () => {
       <Button
         onClick={onOpen}
         gradientDuoTone="purpleToBlue"
-        className="rounded-full"
+        className="rounded-full h-12 w-12 md:fixed md:bottom-0 md:right-0 md:mr-20 md:mb-10 md:w-16 md:h-16"
       >
         <svg
           className="w-6 h-6 text-white"

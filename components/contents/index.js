@@ -7,6 +7,9 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import ModalEdit from "../modal-edit/[id]";

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput, Datepicker } from "flowbite-react";
 import { useState } from "react";
 import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
@@ -13,6 +13,9 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    dob: "",
+    phone: "",
+    hobby: "",
   });
 
   const HandleSubmit = async () => {
@@ -30,9 +33,9 @@ const Register = () => {
     } else {
       Cookies.set("user_token", res?.data?.token, {
         expires: new Date(res?.data?.expires_at),
-        path: "/",
+        path: "/login",
       });
-      router.push("/");
+      router.push("/login");
     }
   };
   return (
@@ -44,7 +47,61 @@ const Register = () => {
               <h2 className="text-center font-semibold text-4xl text-sky-500">
                 register
               </h2>
-
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="name" value="username" />
+                </div>
+                <TextInput
+                  id="name"
+                  placeholder="username"
+                  required
+                  value={payload?.name}
+                  onChange={(event) =>
+                    setPayload({ ...payload, name: event.target.value })
+                  }
+                  type="text"
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="dob" value="Date of Birth" />
+                </div>
+                <Datepicker
+                  required
+                  onSelectedDateChanged={payload?.dob}
+                  onChange={(event) =>
+                    setPayload({ ...payload, dob: event.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="phone" value="phone number" />
+                </div>
+                <TextInput
+                  id="phone"
+                  required
+                  value={payload?.phone}
+                  onChange={(event) =>
+                    setPayload({ ...payload, phone: event.target.value })
+                  }
+                  type="text"
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="hobby" value="hobby" />
+                </div>
+                <TextInput
+                  id="hobby"
+                  required
+                  value={payload?.hobby}
+                  onChange={(event) =>
+                    setPayload({ ...payload, hobby: event.target.value })
+                  }
+                  type="text"
+                />
+              </div>
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="email" value="email" />
@@ -74,13 +131,14 @@ const Register = () => {
                   type="password"
                 />
               </div>
+
               <div className="flex justify-end">
                 <Button
                   onClick={() => HandleSubmit()}
                   className="w-16"
                   gradientDuoTone="purpleToBlue"
                 >
-                  login
+                  register
                 </Button>
               </div>
             </form>
