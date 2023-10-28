@@ -50,6 +50,6 @@
         "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }
     ],
-    "beforeStatementContinuationChars": "never"
+    "beforeStatementContinuationChars": "1"
   }
 }
