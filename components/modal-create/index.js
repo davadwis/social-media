@@ -1,8 +1,11 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable no-use-before-define */
+
 "use client";
+
 import { Button } from "flowbite-react";
 import { useState } from "react";
 import { BsPen } from "react-icons/bs";
-import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import {
@@ -18,8 +21,9 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useMutation } from "@/hooks/useMutation";
 
-const Create = () => {
+function Create() {
   const { mutate } = useMutation();
   const router = useRouter();
   const [payload, setPayload] = useState({
@@ -48,7 +52,7 @@ const Create = () => {
         description: "",
       });
       router.prefetch(
-        `https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all`
+        "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all"
       );
     }
   };
@@ -116,5 +120,5 @@ const Create = () => {
       </Modal>
     </>
   );
-};
+}
 export default Create;

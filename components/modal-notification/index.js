@@ -1,4 +1,9 @@
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 "use client";
+
 import Cookies from "js-cookie";
 import {
   Modal,
@@ -15,11 +20,11 @@ import {
 } from "@chakra-ui/react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import useSWR from "swr";
-import fetcher from "@/utils/fetcher";
 import Link from "next/link";
+import fetcher from "@/utils/fetcher";
 import Date from "../date";
 
-const Notification = () => {
+function Notification() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { data: notification, isLoading } = useSWR(
@@ -87,5 +92,5 @@ const Notification = () => {
       </Modal>
     </>
   );
-};
+}
 export default Notification;
