@@ -1,17 +1,19 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { AiOutlineHome } from "react-icons/ai";
-import Create from "../modal-create";
 import { Avatar, IconButton } from "@chakra-ui/react";
-import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import fetcher from "@/utils/fetcher";
 import { BiLogOut } from "react-icons/bi";
-import Notification from "../modal-notification";
 import Swal from "sweetalert2";
+import fetcher from "@/utils/fetcher";
+import Notification from "../modal-notification";
+import { useMutation } from "@/hooks/useMutation";
+import Create from "../modal-create";
 
-const Sidebar = () => {
+function Sidebar() {
   const router = useRouter();
   const { data } = useSWR(
     [
@@ -55,49 +57,46 @@ const Sidebar = () => {
   };
 
   return (
-    <>
-      <div className="flex-row hidden md:flex">
-        <aside
-          id="default-sidebar"
-          className="top-0 left-0 z-0 w-72 h-full fixed"
-          aria-label="Sidebar"
-        >
-          <div className="h-screen px-3 py-4 overflow-y-auto border-r-2 dark:bg-gray-800 grid content-between">
-            <div className="p-8">
-              <h1 className="font-semibold text-sky-500 text-4xl">
-                <Link href="/">brand</Link>
-              </h1>
-            </div>
-            <div className="p-8 space-y-4">
-              <Link
-                href="/"
-                className="p-4 flex items-center space-x-3 border-transparent rounded-md hover:bg-gray-100"
-              >
-                <AiOutlineHome size={44} />{" "}
-                <span className="text-2xl">home</span>
-              </Link>
-              <Notification />
-
-              <Link
-                href="/profile"
-                className="p-4 flex items-center space-x-3 border-transparent rounded-md hover:bg-gray-100"
-              >
-                <Avatar name={data?.data?.name} />{" "}
-                <span className="text-2xl"> {data?.data?.name}</span>
-              </Link>
-            </div>
-            <div
-              onClick={() => HandleLogout()}
-              className="flex flex-row space-x-3 content-end items-center p-4 cursor-pointer border-transparent rounded-md hover:bg-gray-100"
-            >
-              <BiLogOut className="w-12 h-12" />
-              <span className="text-2xl">logout</span>
-            </div>
+    <div className="flex-row hidden md:flex">
+      <aside
+        id="default-sidebar"
+        className="top-0 left-0 z-0 w-72 h-full fixed"
+        aria-label="Sidebar"
+      >
+        <div className="h-screen py-4 overflow-y-auto border-r-2 dark:bg-gray-800 grid content-between">
+          <div className="p-8">
+            <h1 className="font-semibold text-sky-500 text-4xl">
+              <Link href="/">brand</Link>
+            </h1>
           </div>
-        </aside>
-        <Create />
-      </div>
-    </>
+          <div className="p-8 space-y-4">
+            <Link
+              href="/"
+              className="p-4 flex items-center space-x-3 border-transparent rounded-md hover:bg-gray-100"
+            >
+              <AiOutlineHome size={44} /> <span className="text-2xl">home</span>
+            </Link>
+            <Notification />
+
+            <Link
+              href="/profile"
+              className="p-4 flex items-center space-x-3 border-transparent rounded-md hover:bg-gray-100"
+            >
+              <Avatar name={data?.data?.name} />{" "}
+              <span className="text-2xl"> {data?.data?.name}</span>
+            </Link>
+          </div>
+          <div
+            onClick={() => HandleLogout()}
+            className="flex flex-row space-x-3 content-end items-center p-4 cursor-pointer border-transparent rounded-md hover:bg-gray-100"
+          >
+            <BiLogOut className="w-12 h-12" />
+            <span className="text-2xl">logout</span>
+          </div>
+        </div>
+      </aside>
+      <Create />
+    </div>
   );
-};
+}
 export default Sidebar;
