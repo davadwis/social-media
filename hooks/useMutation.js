@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import { useCallback, useState } from "react";
 
 export const useMutation = () => {

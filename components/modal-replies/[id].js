@@ -56,7 +56,7 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
       },
     ],
     ([url, token]) => fetcher(url, token),
-    { revalidateOnFocus: false, refreshInterval: 0 }
+    { refreshInterval: 10000, revalidateOnFocus: false }
   );
 
   const HandleSubmit = async () => {
@@ -80,7 +80,6 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
         description: "",
       });
     }
-    mutation(`https://paace-f178cafcae7b.nevacloud.io/api/replies/post/${id}`);
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();

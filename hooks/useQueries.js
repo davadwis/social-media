@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { useCallback, useEffect, useState } from "react";
 
 export const useQueries = ({ prefixUrl = "", headers = {} } = {}) => {
