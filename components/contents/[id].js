@@ -58,7 +58,7 @@ function PostId() {
                     <p className="font-light text-gray-500">
                       <span>
                         {item?.user?.email} |{" "}
-                        {moment(item?.created_at, "YYYYMMDD").fromNow()}
+                        {moment(item?.created_at).startOf("hour").fromNow()}
                       </span>
                     </p>
                   </div>
