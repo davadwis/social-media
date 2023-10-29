@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import dynamic from "next/dynamic";
 import Cookies from "js-cookie";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import moment from "moment/moment";
 import PostId from "@/components/contents/[id]";
 import fetcher from "@/utils/fetcher";
 
@@ -41,10 +43,13 @@ function Profile() {
               <CardHeader>
                 <div className="flex justify-start items-center">
                   <Avatar name={data?.data?.name} size="xl" />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col gap-1">
                     <Heading size="md" className="ml-4">
                       {data?.data?.name}
                     </Heading>
+                    <p className="ml-4">
+                      Joined since {moment(data?.data?.created_at).format("ll")}
+                    </p>
                   </div>
                 </div>
               </CardHeader>

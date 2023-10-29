@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable lines-around-directive */
@@ -29,8 +30,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWRMutation from "swr/mutation";
+import moment from "moment/moment";
 import fetcher from "@/utils/fetcher";
-import Date from "../date";
 import ModalDeleteReply from "../modal-delete-reply/[id]";
 import { useMutation } from "@/hooks/useMutation";
 
@@ -156,7 +157,7 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
                 <div className="flex-col ml-3">
                   <h4 className="font-semibold text-lg">{userPost}</h4>
                   <Text className="text-gray-600 font-light">
-                    <Date dateString={postCreated} />
+                    {moment(postCreated).startOf("hour").fromNow}
                   </Text>
                 </div>
               </div>
@@ -190,7 +191,7 @@ function Replies({ id, userPost, post, postCreated, isOwnPost, repliesCount }) {
                           <h4 className="text-lg font-semibold">
                             {item?.user?.name}{" "}
                             <span className="text-gray-600 font-light text-sm">
-                              <Date dateString={item?.created_at} />
+                              {moment(item?.created_at, "YYYYMMDD").fromNow()}
                             </span>
                           </h4>
                           <Text>{item?.description}</Text>

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -22,8 +23,8 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import useSWR from "swr";
 import Link from "next/link";
 import useSWRMutation from "swr/mutation";
+import moment from "moment/moment";
 import fetcher from "@/utils/fetcher";
-import Date from "../date";
 import { useMutation } from "@/hooks/useMutation";
 
 function Notification() {
@@ -81,7 +82,7 @@ function Notification() {
                     <div className="pt-2 text-lg font-light">
                       <p>has {item?.remark} your post</p>
                       <p className="flex text-sm justify-end">
-                        <Date dateString={item?.created_at} />
+                        {moment(item?.created_at).startOf("hour").fromNow()}
                       </p>
                     </div>
                   </CardBody>

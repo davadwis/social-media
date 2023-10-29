@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/order */
 /* eslint-disable react/jsx-no-useless-fragment */
 import Cookies from "js-cookie";
 import {
@@ -9,21 +11,23 @@ import {
   IconButton,
   Spinner,
 } from "@chakra-ui/react";
-
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Link from "next/link";
 import useSWR from "swr";
 import ModalEdit from "../modal-edit/[id]";
 import ModalDelete from "../modal-delete/[id]";
-
 import fetcher from "@/utils/fetcher";
-
-import Date from "../date";
 import Likes from "../like/[id]";
 import Replies from "../modal-replies/[id]";
+import SkeletonPosts from "../skeleton-posts";
+import moment from "moment/moment";
 
 function Contents() {
-  const { data: posts, isLoading } = useSWR(
+  const {
+    data: posts,
+    isLoading,
+    isValidating,
+  } = useSWR(
     [
       "https://paace-f178cafcae7b.nevacloud.io/api/posts?type=all",
       {
@@ -37,14 +41,12 @@ function Contents() {
   );
   return (
     <div className="w-full m-auto p-4 py-20 md:pl-60 md:py-8 md:w-2/3">
-      {isLoading ? (
-        <div className="flex justify-center items-center">
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          {posts?.data?.map((item) => (
-            <div key={item?.id} className="border-b-2 border-gray-200 py-4 p-4">
+      {posts?.data?.map((item) => (
+        <div key={item?.id}>
+          {isLoading || isValidating ? (
+            <SkeletonPosts />
+          ) : (
+            <div className="border-b-2 border-gray-200 py-4 p-4">
               <div className="flex justify-between items-center">
                 <div className="flex">
                   {item?.is_own_post ? (
@@ -63,7 +65,7 @@ function Contents() {
                     <p className="font-light text-gray-500">
                       <span>
                         {item?.user?.email} |{" "}
-                        <Date dateString={item?.created_at} />
+                        {moment(item?.created_at, "YYYYMMDD").fromNow()}
                       </span>
                     </p>
                   </div>
@@ -115,9 +117,9 @@ function Contents() {
                 </div>
               </div>
             </div>
-          ))}
-        </>
-      )}
+          )}
+        </div>
+      ))}
     </div>
   );
 }
