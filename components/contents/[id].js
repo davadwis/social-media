@@ -53,7 +53,15 @@ function PostId() {
                   <Avatar name={item?.user?.name} />
                   <div className="flex flex-col ml-3">
                     <h4 className="font-semibold text-lg">
-                      {item?.user?.name}
+                      {item?.user?.name}{" "}
+                      {item?.updated_at !== item?.created_at ? (
+                        <span className="font-light text-gray-500 text-sm">
+                          {" "}
+                          | edited
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </h4>
                     <p className="font-light text-gray-500">
                       <span>
